@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Create Invoice{% endblock %}
+{% block content %}
+<h2>Create Invoice for {{ client.name }}</h2>
+<form method="POST">
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label>Invoice No</label>
+            <input name="invoice_no" class="form-control" required>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label>Issue Date</label>
+            <input name="issue_date" type="date" class="form-control" required>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label>Due Date</label>
+            <input name="due_date" type="date" class="form-control" required>
+        </div>
+    </div>
+
+    <hr>
+    <h4>Line Items</h4>
+    <div id="items">
+        <div class="item row mb-2">
+            <div class="col-md-2">
+                <input name="item_name" placeholder="Item Name" class="form-control" required>
+            </div>
+            <div class="col-md-2">
+                <input name="description" placeholder="Description" class="form-control">
+            </div>
+            <div class="col-md-1">
+                <input name="quantity" type="number" placeholder="Qty" class="form-control" required>
+            </div>
+            <div class="col-md-2">
+                <input name="rate" type="number" placeholder="Rate" class="form-control" required>
+            </div>
+            <div class="col-md-2">
+                <input name="item_tax" type="number" step="0.01"  placeholder="Tax %" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <input name="item_discount" type="number" step="0.01"  placeholder="Discount" class="form-control">
+            </div>
+            <div class="col-md-1">
+                <button type="button" class="btn btn-danger remove-item">Remove</button>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn my-2" id="new-item" onclick="addItem()">+ Add Item</button>
+    <br>
+    <button class="btn btn-success" id="create-invoice" style="margin-left: 30%; width: 25%; margin-top: 5%;">Create Invoice</button>
+</form>
+
+<script>
+function addItem() {
+    let item = document.querySelector('.item');
+    let clone = item.cloneNode(true);
+    clone.querySelectorAll('input').forEach(input => input.value = '');
+    clone.querySelector('input[name="item_tax"]').value = 0;
+    clone.querySelector('input[name="item_discount"]').value = 0;
+    document.getElementById('items').appendChild(clone);
+}
+
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('remove-item')) {
+        let items = document.querySelectorAll('.item');
+        if (items.length > 1) {
+            e.target.closest('.item').remove();
+        }
+    }
+});
+</script>
+{% endblock %}

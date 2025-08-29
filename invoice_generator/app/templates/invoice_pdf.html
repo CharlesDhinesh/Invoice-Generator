@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice #{{ invoice.invoice_no }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            color: #333;
+        }
+        h1, h4, h5 {
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #aaa;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .text-end {
+            text-align: right;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Invoice #{{ invoice.invoice_no }}</h1>
+    <p><strong>Issue Date:</strong> {{ invoice.issue_date }}<br>
+       <strong>Due Date:</strong> {{ invoice.due_date }}</p>
+
+    <h4>Bill To:</h4>
+    <p>{{ invoice.client.name }}<br>
+       {{ invoice.client.company }}<br>
+       {{ invoice.client.billing_address }}</p>
+
+    <table class=" table-hover">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Description</th>
+                <th>Qty</th>
+                <th>Rate</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in invoice.items %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ invoice.currency }}{{ item.rate }}</td>
+                <td>{{ invoice.currency }}{{ item.quantity * item.rate }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-end">
+        <p><strong>Subtotal:</strong> {{ invoice.currency }}{{ invoice.subtotal }}</p>
+        <p><strong>Tax:</strong> {{ invoice.tax }}%</p>
+        <p><strong>Discount:</strong> {{ invoice.currency }}{{ invoice.discount }}</p>
+        <h3><strong>Grand Total:</strong> {{ invoice.currency }}{{ invoice.total }}</h3>
+    </div>
+
+</body>
+</html>

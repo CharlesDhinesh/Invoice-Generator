@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Preview Invoice{% endblock %}
+{% block content %}
+<h2 style="text-align: center; font-size: 40px;">Invoice Preview</h2>
+ <div class="invoice-box">
+        <!-- Header -->
+        <div class="invoice-header">
+            <h1>INVOICE</h1>
+            <div>
+                <strong>Invoice #:</strong> {{ invoice.invoice_no }} <br>
+                <strong>Date:</strong> {{ invoice.issue_date }} <br>
+                <strong>Due:</strong> {{ invoice.due_date }}
+            </div>
+        </div>
+
+        <!-- Client Info -->
+        <div class="invoice-details ">
+            <h3 >Bill To:</h3>
+            <p>
+                <strong>{{ invoice.client.name }}</strong><br>
+                {{ invoice.client.company }}<br>
+                {{ invoice.client.email }}<br>
+                {{ invoice.client.phone }}<br>
+                {{ invoice.client.billing_address }}
+            </p>
+        </div>
+
+        <!-- Items Table -->
+        <table class=" table-hover table-hover">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Rate</th>
+                    <th>Tax (%)</th>
+                    <th>Discount</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in invoice.items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ "%.2f"|format(item.rate) }}</td>
+                    <td>{{ "%.2f"|format(item.tax) }}</td>
+                    <td>{{ "%.2f"|format(item.discount) }}</td>
+                    <td>
+                        {{ "%.2f"|format((item.quantity * item.rate) 
+                           + ((item.quantity * item.rate) * item.tax / 100) 
+                           - item.discount) }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Totals -->
+        <div class="total-section">
+            <h3>Subtotal: {{ "%.2f"|format(invoice.subtotal) }}</h3>
+            <h2>Grand Total: {{ "%.2f"|format(invoice.total) }}</h2>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mb-3">
+            <a class="btn btn-secondary" href="{{ url_for('main.download_invoice', invoice_id=invoice.id) }}" id="download-invoice">
+                <i class="fa-solid fa-download" id="download"></i> Download PDF</a>
+            <a class="btn ms-3" href="{{ url_for('main.email_invoice', invoice_id=invoice.id) }}" id="email-invoice">✉ Email Invoice</a>
+            <a href="{{ url_for('main.index') }}" class="btn btn-back" id="back">← Back</a>
+        </div>
+    </div>
+{% endblock %}

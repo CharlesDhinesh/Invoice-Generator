@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Add Client{% endblock %}
+{% block content %}
+
+<h2 class="text-center">Add New Client</h2>
+<form method="POST" class="container">
+    <div class="row">
+        <div class="col-12 col-md-6 mb-3">
+            <label>Name</label>
+            <input name="name" class="form-control" required>
+        </div>
+        <div class="col-12 col-md-6 mb-3">
+            <label>Email</label>
+            <input name="email" type="email" class="form-control" required>
+        </div>
+        <div class="col-12 col-md-6 mb-3">
+            <label>Phone</label>
+            <input name="phone" class="form-control" required>
+        </div>
+        <div class="col-12 col-md-6 mb-3">
+            <label>Company</label>
+            <input name="company" class="form-control">
+        </div>
+        <div class="col-12 mb-3">
+            <label>Billing Address</label>
+            <textarea name="billing_address" class="form-control" required></textarea>
+        </div>
+    </div>
+    <button class="btn btn-primary w-100">Add Client</button>
+</form>
+
+{% endblock %}
